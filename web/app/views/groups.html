@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+{% from 'layout.html' import navbar2, myscripts %}
+
+{% block title %}LLIN.::.Groups{% endblock%}
+{% block stylesheets %}
+<link href="/static/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="/static/js/Buttons-1.1.2/css/buttons.dataTables.min.css" rel="stylesheet">
+{% endblock %}
+{% block nav %}
+    {% call navbar2() %}
+        <li><a href="/reporters" class="">Reporters</a></li>
+        <li><a href="/distributionpoints" class="">Distribution Points</a></li>
+        <li><a href="/warehousedata" class="">Warehouse Log</a></li>
+        <li><a href="/dispatch" class="">Dispatch</a></li>
+       <li class="dropdown">
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Control Panel <b class="caret"></b></a>
+           <ul class="dropdown-menu">
+             <li><a href="/reports" class="active">Reports</a></li>
+             <li class="divider"></li>
+             <li class="nav-header">Admin Panel</li>
+             <li><a href="/groups">Groups</a></li>
+             <li><a href="/users">Users</a></li>
+             <li><a href="/settings">Settings</a></li>
+           </ul>
+       </li>
+    {% endcall %}
+{% endblock %}
+
+{% block content %}
+<!-- BEGIN TEST -->
+
+<!-- END TEST -->
+
+
+    <div id="">
+    <form id="groupsForm" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <table>
+                    <tr>
+                        <td><label for="name">Group Name:</label></td>
+                        <td><input name="name" id="name" type="text" value="{{ name }}" class="" required/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="descr">Description:</label></td>
+                        <td><input name="descr" id="name" type="text" value="{{ descr }}" class="" required/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </td>
+                    </tr>
+        </table>
+
+    </form>
+    </div>
+
+    <div class="tab-pane " id="users">
+        <table id="usertable" class="table table-condensed  table-striped table-bordered tablesorter">
+                <thead>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    {% for d in groups %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ d.name }} </td>
+                            <td>{{ d.descr }}</td>
+                            <td>
+                                <a href="/groups?ed={{ d.id }}" class="" value={{ d.id }}><i class="icon-edit"></i></a>
+                                                    &nbsp;&nbsp;&nbsp;
+                                <a href="/groups?d_id={{d.id }}&page={{ page }}"  class="gwe" value={{ d.id }}><i class="icon-remove"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+        </table>
+    </div>
+{% endblock %}
+{% block scripts%}
+    {% call myscripts() %}
+        <script type="text/javascript" src="/static/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="/static/js/Buttons-1.1.2/js/dataTables.buttons.min.js"></script>
+        <script type="text/javascript" src="/static/js/Buttons-1.1.2/js/buttons.flash.min.js"></script>
+        <script type="text/javascript" src="/static/js/jszip.min.js"></script>
+        <script type="text/javascript" src="/static/js/pdfmake.min.js"></script>
+        <script type="text/javascript" src="/static/js/vfs_fonts.js"></script>
+        <script type="text/javascript" src="/static/js/Buttons-1.1.2/js/buttons.html5.min.js"></script>
+        <script type="text/javascript" src="/static/js/Buttons-1.1.2/js/buttons.print.min.js"></script>
+        <script src="/static/js/bootstrap-validator/dist/validator.min.js"></script>
+        <script src="/static/js/reporters.js"></script>
+        <script>
+        $(document).ready(function() {
+            $("#usertable").DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+            $('#reporterForm').validator()
+        });
+        </script>
+    {% endcall %}
+{% endblock %}
