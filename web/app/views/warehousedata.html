@@ -8,16 +8,17 @@
 {% endblock %}
 {% block nav %}
     {% call navbar2() %}
-        <li><a href="/reporters" class="active">Reporters</a></li>
+        <li><a href="/reporters" class="">Reporters</a></li>
+        <li><a href="/distributionpoints" class="">Distribution Points</a></li>
         <li><a href="/warehousedata" class="active">Warehouse Log</a></li>
-        <li><a href="/dispatch" class="active">Dispatch</a></li>
+        <li><a href="/dispatch" class="">Dispatch</a></li>
        <li class="dropdown">
            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Control Panel <b class="caret"></b></a>
            <ul class="dropdown-menu">
-             <li><a href="/smslogs">SMS Logs</a></li>
              <li><a href="/reports" class="active">Reports</a></li>
              <li class="divider"></li>
              <li class="nav-header">Admin Panel</li>
+             <li><a href="/groups">Groups</a></li>
              <li><a href="/users">Users</a></li>
              <li><a href="/settings">Settings</a></li>
            </ul>
@@ -36,20 +37,20 @@
                     <table>
             <tr>
                 <td><label for="po_number">PO Number:</label></td>
-                <td><input name="po_number" id="po_number" type="text" value="{{ po_number }}" class=""/></td>
+                <td><input name="po_number" id="po_number" type="text" value="{{ po_number }}" class="" required /></td>
             </tr>
             <tr>
                 <td><label for="funding_source">Funding Source:</label></td>
-                <td><input name="funding_source" id="funding_source" type="text" value="{{ funding_source }}" class=""/></td>
+                <td><input name="funding_source" id="funding_source" type="text" value="{{ funding_source }}" class="" required /></td>
             </tr>
             <tr>
                 <td><label for="manufacturer">Manufacturer:</label></td>
-                <td><input name="manufacturer" id="manufacturer" type="text" value="{{ manufacturer }}" class="" /></td>
+                <td><input name="manufacturer" id="manufacturer" type="text" value="{{ manufacturer }}" class="" required/></td>
             </tr>
             <tr>
                 <td><label for="made_in">Made In:</label></td>
                 <td>
-                    <select name="made_in" id="made_in">
+                    <select name="made_in" id="made_in" required>
                         <option value="">Select Country</option>
                         {% for c in countries%}
                             <option value="{{c.id}}">{{ c.name }}</option>
@@ -59,12 +60,12 @@
             </tr>
             <tr>
                 <td><label for="batch_number">Batch Number:</label></td>
-                <td><input name="batch_number" id="batch_number" type="text" value="{{ batch_number }}" class="" /></td>
+                <td><input name="batch_number" id="batch_number" type="text" value="{{ batch_number }}" class="" required /></td>
             </tr>
             <tr>
                 <td><label for="net_type">Net Type:</label></td>
                 <td>
-                    <select name="net_type" id="net_type">
+                    <select name="net_type" id="net_type" required>
                         <option value="">Select Net Type</option>
                         <option value="Polyester">Polyester</option>
                         <option value="Polyethylene">Polyethylene</option>
@@ -74,11 +75,11 @@
             </tr>
             <tr>
                 <td><label for="quantity">Quantity:</label></td>
-                <td><input name="quantity" id="quantity" type="text" class="" /></td>
+                <td><input name="quantity" id="quantity" type="text" class="" required/></td>
             </tr>
             <tr>
                 <td><label for="waybill">Waybill:</label></td>
-                <td><input name="waybill" id="waybill" type="text" value="{{waybill }}" class=""/></td>
+                <td><input name="waybill" id="waybill" type="text" value="{{waybill }}" class="" required /></td>
             </tr>
         </table>
                 </td>
@@ -88,27 +89,29 @@
                 <table>
             <tr>
                 <td><label for="warehouse">Warehouse Name:</label></td>
-                <td><input name="warehouse" id="warehouse" type="text" value="{{ warehouse }}" class="" /></td>
+                <td><input name="warehouse" id="warehouse" type="text" value="{{ warehouse }}" class="" required/></td>
             </tr>
             <tr>
                 <td><label for="entry_date">Date of Entry:</label></td>
-                <td><input name="entry_date" id="entry_date" type="date" value="{{ entry_date }}" class=""/></td>
+                <td><input name="entry_date" id="entry_date" type="date" value="{{ entry_date }}" class="" required/></td>
             </tr>
             <tr>
                 <td><label for="nda_sampling_date">Date of NDA Sampling:</label></td>
-                <td><input name="nda_sampling_date" id="nda_sampling_date" type="date" value="{{ nda_sampling_date }}" class="" /></td>
+                <td><input name="nda_sampling_date" id="nda_sampling_date" type="date" value="{{ nda_sampling_date }}" class="" required /></td>
             </tr>
             <tr>
                 <td><label for="nda_conditional_release_date">Date of NDA Conditional Release:</label></td>
-                <td><input name="nda_conditional_release_date" id="nda_conditional_release_date" type="date" value="{{ nda_conditional_release_date}}" class="" /></td>
+                <td><input name="nda_conditional_release_date" id="nda_conditional_release_date"
+                    type="date" value="{{ nda_conditional_release_date}}" class="" required/></td>
             </tr>
             <tr>
                 <td><label for="nda_testing_result_date">Date of NDA Testing Result:</label></td>
-                <td><input name="nda_testing_result_date" id="nda_testing_result_date" type="date" value="{{ nda_testing_result_date }}" class="" /></td>
+                <td><input name="nda_testing_result_date" id="nda_testing_result_date" type="date"
+                    value="{{ nda_testing_result_date }}" class="" required/></td>
             </tr>
             <tr>
                 <td><label for="unbs_sampling_date">Date of UNBS Sampling:</label></td>
-                <td><input name="unbs_sampling_date" id="unbs_sampling_date" type="date" value="{{ unbs_sampling_date }}" class="" /></td>
+                <td><input name="unbs_sampling_date" id="unbs_sampling_date" type="date" value="{{ unbs_sampling_date }}" class="" required/></td>
             </tr>
              <tr>
                 <td><label for="remarks">Remarks:</label></td>
