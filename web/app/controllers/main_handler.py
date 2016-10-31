@@ -35,7 +35,7 @@ class Index:
             if info.role == 'Warehouse Manager':
                 return web.seeother("/warehousedata")
             else:
-                return web.seeother("/smslogs")
+                return web.seeother("/dashboard")
         else:
             session.loggedin = False
             session.logon_err = r[1]

@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}LLIN.::.Settings{% endblock %}
+{% block title %}LLIN.::.Dashboard{% endblock %}
 {% from 'layout.html' import navbar2, myscripts %}
 
 {% block nav %}
     {% call navbar2() %}
-        <li><a href="/dashboard" class="">Dashboard</a></li>
+        <li><a href="/dashboard" class="active">Dashboard</a></li>
         <li><a href="/reporters" class="">Reporters</a></li>
         <li><a href="/distributionpoints" class="">Distribution Points</a></li>
         <li><a href="/warehousedata" class="">Warehouse Log</a></li>
@@ -17,7 +17,7 @@
                 <li class="nav-header">Admin Panel</li>
                 <li><a href="/users">Groups</a></li>
                 <li><a href="/users">Users</a></li>
-                <li><a href="/settings" class="active">Settings</a></li>
+                <li><a href="/settings" class="">Settings</a></li>
            </ul>
        </li>
     {% endcall %}

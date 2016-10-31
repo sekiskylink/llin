@@ -1,13 +1,14 @@
 {% extends "layout.html" %}
 {% from 'layout.html' import navbar2, myscripts %}
 
-{% block title %}LLIN.::.Users{% endblock%}
+{% block title %}LLIN.::.Warehouse{% endblock%}
 {% block stylesheets %}
 <link href="/static/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="/static/js/Buttons-1.1.2/css/buttons.dataTables.min.css" rel="stylesheet">
 {% endblock %}
 {% block nav %}
     {% call navbar2() %}
+        <li><a href="/dashboard" class="">Dashboard</a></li>
         <li><a href="/reporters" class="">Reporters</a></li>
         <li><a href="/distributionpoints" class="">Distribution Points</a></li>
         <li><a href="/warehousedata" class="active">Warehouse Log</a></li>
