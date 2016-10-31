@@ -4,7 +4,7 @@
 """
 
 import web
-from . import csrf_protected, db, require_login, render
+from . import db, require_login, render
 from settings import PAGE_LIMIT
 from app.tools.pagination import doquery, countquery, getPaginationString
 from app.tools.utils import lit, default
@@ -32,6 +32,6 @@ class WarehouseData:
         del l['self']
         return render.warehousedata(**l)
 
-    @csrf_protected
+    @require_login
     def POST(self):
         pass

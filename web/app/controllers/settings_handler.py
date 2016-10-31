@@ -1,5 +1,5 @@
 import web
-from . import csrf_protected, db, require_login, render
+from . import db, require_login, render
 
 
 class Settings:
@@ -11,7 +11,6 @@ class Settings:
         del l['self']
         return render.settings(**l)
 
-    @csrf_protected
     @require_login
     def POST(self):
         params = web.input(

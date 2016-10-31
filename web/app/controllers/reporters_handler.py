@@ -1,5 +1,5 @@
 import web
-from . import csrf_protected, db, require_login, get_session, render
+from . import db, require_login, get_session, render
 
 
 class Reporters:
@@ -37,7 +37,6 @@ class Reporters:
         del l['self']
         return render.reporters(**l)
 
-    @csrf_protected
     @require_login
     def POST(self):
         params = web.input(
