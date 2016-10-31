@@ -42,7 +42,7 @@ class Reporters:
     def POST(self):
         params = web.input(
             firstname="", lastname="", telephone="", email="", location_id="", dpoint="",
-            page="1", ed="", d_id="")
+            national_id="", role="", page="1", ed="", d_id="")
         try:
             page = int(params.page)
         except:
@@ -50,19 +50,33 @@ class Reporters:
 
         with db.transaction():
             if params.ed:
-                pass
+                location = params.location if params.location else None
+                dpoint = params.dpoint if params.dpoint else None
+                r = db.query(
+                    "UPDATE reporters SET firstname=$firstname, lastname=$lastname, "
+                    "telephone=$telephone, email=$email, reporting_location=$location, "
+                    "distribution_point=$dpoint, national_id=$nid "
+                    "WHERE id=$id", {
+                        'firstname': params.firstname, 'lastname': params.lastname,
+                        'telephone': params.telephone, 'email': params.email,
+                        'location': location, 'dpoint': dpoint, 'nid': params.national_id,
+                        'id': params.ed
+                    })
+                db.query(
+                    "UPDATE reporter_groups_reporters SET group_id = $gid "
+                    " WHERE reporter_id = $id ", {'gid': params.role, 'id': params.ed})
                 return web.seeother("/reporters")
             else:
                 location = params.location if params.location else None
                 dpoint = params.dpoint if params.dpoint else None
                 r = db.query(
                     "INSERT INTO reporters (firstname, lastname, telephone, email, "
-                    " reporting_location, distribution_point, uuid) VALUES "
+                    " reporting_location, distribution_point, national_id, uuid) VALUES "
                     " ($firstname, $lastname, $telephone, $email, $location, $dpoint,"
-                    " uuid_generate_v4()) RETURNING id", {
+                    " $nid, uuid_generate_v4()) RETURNING id", {
                         'firstname': params.firstname, 'lastname': params.lastname,
                         'telephone': params.telephone, 'email': params.email,
-                        'location': location, 'dpoint': dpoint
+                        'location': location, 'dpoint': dpoint, 'nid': params.national_id
                     })
                 if r:
                     reporter_id = r[0]['id']
