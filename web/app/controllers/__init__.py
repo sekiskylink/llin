@@ -37,7 +37,6 @@ db = web.database(
     port=db_port
 )
 
-SESSION = ''
 APP = None
 
 
@@ -50,8 +49,9 @@ def get_app():
     global APP
     return APP
 
-# store = web.session.DBStore(db, 'sessions')
+store = web.session.DBStore(db, 'sessions')
 # session = web.session.Session(get_app(), store, initializer={'loggedin': False})
+SESSION = web.session.Session(get_app(), store, initializer={'loggedin': False})
 
 
 def get_session():
