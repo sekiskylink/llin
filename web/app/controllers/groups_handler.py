@@ -1,5 +1,5 @@
 import web
-from . import db, require_login, render
+from . import csrf_protected, db, require_login, render
 
 
 class Groups:
@@ -12,6 +12,7 @@ class Groups:
         del l['self']
         return render.groups(**l)
 
+    @csrf_protected
     @require_login
     def POST(self):
         params = web.input(

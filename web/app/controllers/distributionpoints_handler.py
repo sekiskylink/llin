@@ -1,5 +1,5 @@
 import web
-from . import db, require_login, render, get_session
+from . import csrf_protected, db, require_login, render, get_session
 
 
 class DistPoints:
@@ -41,6 +41,7 @@ class DistPoints:
         del l['self']
         return render.dpoints(**l)
 
+    @csrf_protected
     @require_login
     def POST(self):
         params = web.input(

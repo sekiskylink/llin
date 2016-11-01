@@ -5,7 +5,7 @@
 
 import web
 from . import render
-from . import db, get_session, put_session
+from . import csrf_protected, db, get_session, put_session
 from app.tools.utils import auth_user
 
 
@@ -15,6 +15,7 @@ class Index:
         del l['self']
         return render.start(**l)
 
+    @csrf_protected
     def POST(self):
         session = get_session()
         params = web.input(username="", password="")

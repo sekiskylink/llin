@@ -1,5 +1,5 @@
 import web
-from . import db, require_login, render
+from . import csrf_protected, db, require_login, render
 
 
 class Dashboard:
@@ -11,6 +11,7 @@ class Dashboard:
         del l['self']
         return render.dashboard(**l)
 
+    @csrf_protected
     @require_login
     def POST(self):
         params = web.input(page="1", ed="", d_id="")
