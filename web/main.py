@@ -22,13 +22,13 @@ web.config.debug = DEBUG
 app = web.application(URLS, globals(), autoreload=False)
 store = web.session.DBStore(db, 'sessions')
 session = web.session.Session(app, store, initializer={'loggedin': False})
+put_session(session)
 
 app.notfound = notfound
 app.internalerror = internalerror
 app.add_processor(web.loadhook(header_html))
 
 if __name__ == '__main__':
-    put_session(session)
     put_app(app)
     app.run()
 
