@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
-{% from 'layout.html' import navbar2, myscripts %}
+{% from 'layout.html' import navbar2, myscripts, err %}
 
 {% block title %}LLIN.::.Warehouse{% endblock%}
 {% block stylesheets %}
 <link href="/static/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="/static/js/Buttons-1.1.2/css/buttons.dataTables.min.css" rel="stylesheet">
+<link href="/static/js/datetimepicker/jquery.datetimepicker.min.css" rel="stylesheet">
 {% endblock %}
 {% block nav %}
     {% call navbar2() %}
@@ -28,10 +29,16 @@
 {% endblock %}
 
 {% block content %}
-    <div id="">
+    {{ err(err_msg)}}
+    <div class="alert alert-error hide fade in" id="error_div">
+        <button class="close" data-dismiss="alert" type="button">×</button>
+        <p class="text-error" id="text-error"></p>
+    </div>
+    <div>
         <filedset>
         <legend>National LLIN Delivery Log</legend>
-    <form name="" method="post" action="">
+    <form name="" id="wform" method="post" action="">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <table>
             <tr>
                 <td>
@@ -61,22 +68,41 @@
             </tr>
             <tr>
                 <td><label for="batch_number">Batch Number:</label></td>
-                <td><input name="batch_number" id="batch_number" type="text" value="{{ batch_number }}" class="" required /></td>
+                <td><input name="batch_number" id="batch_number" type="text" value="{{ batch_number }}" class="" /></td>
             </tr>
             <tr>
-                <td><label for="net_type">Net Type:</label></td>
+                <td><label for="nets_type">Nets Type:</label></td>
                 <td>
-                    <select name="net_type" id="net_type" required>
-                        <option value="">Select Net Type</option>
-                        <option value="Polyester">Polyester</option>
-                        <option value="Polyethylene">Polyethylene</option>
-                        <option value="Polypropylene">Polypropylene</option>
+                    <select>
+                        <option value="">Select Nets Type</option>
+                        <option value="Olyset">Olyset Net</option>
+                        <option value="Olyset Plus">Olyset Plus</option>
+                        <optiom value="PermaNet 2.0">PermaNet 2.0</option>
+                        <option value="TBA">TBA</option>
+                        <option value=""></option>
                     </select>
+                    <!--<input name="nets_type" id="nets_type" type="text" value="{{ nets_type}}" class="" required/>-->
                 </td>
             </tr>
             <tr>
-                <td><label for="quantity">Quantity:</label></td>
-                <td><input name="quantity" id="quantity" type="text" class="" required/></td>
+                <td><label for="nets_color">Nets Color:</label></td>
+                <td>
+                    <select name="nets_color" id="nets_color" placeholder="Select Color">
+                        <option value="">Select Nets Color</option>
+                        {% for color in ('Blue', 'Green', 'White') %}
+                            <option value="{{color}}" {% if color == nets_color %} selected="yes" {% endif%}>{{color}}</option>
+
+                        {% endfor %}
+
+                    </select>
+                </td>
+            </tr><tr>
+                <td><label for="nets_size">Nets Size:</label></td>
+                <td><input name="nets_size" id="nets_size" type="text" value="{{ nets_size }}" class="" /></td>
+            </tr>
+            <tr>
+                <td><label for="quantity">Quantity (Bales):</label></td>
+                <td><input name="quantity" id="quantity" type="number" value="0" class="" required/></td>
             </tr>
             <tr>
                 <td><label for="waybill">Waybill:</label></td>
@@ -84,7 +110,7 @@
             </tr>
         </table>
                 </td>
-                <td></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;</td>
                 <td></td>
                 <td>
                 <table>
@@ -93,43 +119,70 @@
                 <td><input name="warehouse" id="warehouse" type="text" value="{{ warehouse }}" class="" required/></td>
             </tr>
             <tr>
+                <td><label for="sub_warehouse">Sub Warehouse:</label></td>
+                <td><input name="sub_warehouse" id="sub_warehouse" type="text" value="{{ warehouse }}" class="" required/></td>
+            </tr>
+            <tr>
                 <td><label for="entry_date">Date of Entry:</label></td>
-                <td><input name="entry_date" id="entry_date" type="date" value="{{ entry_date }}" class="" required/></td>
+                <td><input name="entry_date" id="entry_date" type="text" value="{{ entry_date }}" placeholder="YYYY-MM-DD" class="datefield" required/></td>
+            </tr>
+            <tr>
+                <td><label for="nda_samples">NDA Samples:</label></td>
+                <td><input name="nda_samples" id="nda_samples" type="number" value="{{ nda_samples }}" class="" required/></td>
             </tr>
             <tr>
                 <td><label for="nda_sampling_date">Date of NDA Sampling:</label></td>
-                <td><input name="nda_sampling_date" id="nda_sampling_date" type="date" value="{{ nda_sampling_date }}" class="" required /></td>
+                <td><input name="nda_sampling_date" id="nda_sampling_date" type="text" value="{{ nda_sampling_date }}"
+                    placeholder="YYYY-MM-DD" class="datefield" /></td>
             </tr>
             <tr>
                 <td><label for="nda_conditional_release_date">Date of NDA Conditional Release:</label></td>
                 <td><input name="nda_conditional_release_date" id="nda_conditional_release_date"
-                    type="date" value="{{ nda_conditional_release_date}}" class="" required/></td>
+                    type="text" value="{{ nda_conditional_release_date}}" placeholder="YYYY-MM-DD" class="datefield"/></td>
             </tr>
             <tr>
                 <td><label for="nda_testing_result_date">Date of NDA Testing Result:</label></td>
-                <td><input name="nda_testing_result_date" id="nda_testing_result_date" type="date"
-                    value="{{ nda_testing_result_date }}" class="" required/></td>
+                <td><input name="nda_testing_result_date" id="nda_testing_result_date" type="text"
+                    value="{{ nda_testing_result_date }}" placeholder="YYYY-MM-DD" class="datefield"/></td>
             </tr>
             <tr>
                 <td><label for="unbs_sampling_date">Date of UNBS Sampling:</label></td>
-                <td><input name="unbs_sampling_date" id="unbs_sampling_date" type="date" value="{{ unbs_sampling_date }}" class="" required/></td>
+                <td><input name="unbs_sampling_date" id="unbs_sampling_date" type="text" value="{{ unbs_sampling_date }}"
+                    placeholder="YYYY-MM_DD" class="datefield" /></td>
+            </tr>
+            <tr>
+                <td><label for="unbs_samples">UNBS Samples:</label></td>
+                <td><input name="unbs_samples" id="unbs_samples" type="number" value="{{ unbs_samples }}" class="datefield"/></td>
             </tr>
              <tr>
                 <td><label for="remarks">Remarks:</label></td>
                 <td><textarea name="remarks" id="remarks" value="{{ remarks }}" class=""></textarea></td>
             </tr>
 
-            <tr>
-                <td></td>
-                <td><input name="submit" type="submit" value="Save" class="btn" /></td>
-            </tr>
         </table>
                 </td>
             </tr>
         </table>
 
+        <div class="row">
+                <div class="span4"></div>
+                <div class="span4">
+                <button type="submit" id="save" class="btn btn-primary">Save</button>
+                </div>
+                <div class="span4"></div>
+        </div>
+
     </form>
     </fieldset>
+    </div>
+    <div id="confirm" class="modal hide fade">
+        <div class="modal-body">
+            Are you sure you want to delete warehouse log data?
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-primary" id="delete">Delete</button>
+            <button type="button" data-dismiss="modal" class="btn" id="cancel">Cancel</button>
+        </div>
     </div>
 
     <div class="tab-pane " id="users">
@@ -146,18 +199,20 @@
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    {% for user in users %}
+                    {% for d in warehousedata %}
                         <tr>
                             <td>{{ loop.index }}</td>
-                            <td>{{ user.firstname }} &nbsp; {{ user.lastname }}</td>
-                            <td>{{ user.telephone }}</td>
-                            <td>{{ user.username }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.user_role }}</td>
+                            <td>{{ d.po_number }}</td>
+                            <td>{{ d.funding_source }}</td>
+                            <td>{{ d.manufacturer }}</td>
+                            <td>{{ d.made_in }}</td>
+                            <td>{{ d.quantity_bales }}</td>
+                            <td>{{ d.waybill }}</td>
+                            <td>{{ d.warehouse }}</td>
                             <td>
-                                <a href="/users?ed={{ user.id }}" class="" value={{ user.id }}><i class="icon-edit"></i></a>
+                                <a href="/warehousedata?ed={{ d.id }}" class="" value={{ d.id }}><i class="icon-edit"></i></a>
                                                     &nbsp;&nbsp;&nbsp;
-                                <a href="/users?d_id={{ user.id }}&page={{ page }}" class="gwe" value={{ user.id }}><i class="icon-remove"></i></a>
+                                <a href="/warehousedata?d_id={{ d.id }}&page={{ page }}" data-target="#confirm" class="gwe" value={{ d.id }}><i class="icon-remove"></i></a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -176,13 +231,72 @@
         <script type="text/javascript" src="/static/js/vfs_fonts.js"></script>
         <script type="text/javascript" src="/static/js/Buttons-1.1.2/js/buttons.html5.min.js"></script>
         <script type="text/javascript" src="/static/js/Buttons-1.1.2/js/buttons.print.min.js"></script>
+        <script type="text/javascript" src="/static/js/datetimepicker/jquery.datetimepicker.full.min.js"></script>
         <script>
         $(document).ready(function() {
+            $('#error_div').hide();
             $("#usertable").DataTable({
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
+            });
+            $.datetimepicker.setLocale('en');
+            $('#entry_date').datetimepicker({
+                timepicker:false,
+                format:'Y-m-d'
+            });
+            $('#nda_sampling_date').datetimepicker({
+                timepicker:false,
+                format:'Y-m-d'
+            });
+            $('#nda_conditional_release_date').datetimepicker({
+                timepicker:false,
+                format:'Y-m-d'
+            });
+            $('#unbs_sampling_date').datetimepicker({
+                timepicker:false,
+                format:'Y-m-d'
+            });
+            $('#nda_testing_result_date').datetimepicker({
+                timepicker:false,
+                format:'Y-m-d'
+            });
+            /* Check if waybill exist */
+            $('#save').click(function(){
+                val = $('#waybill').val()
+                if(val == '')
+                    val = 0;
+                $.get(
+                    '/api/v1/waybill/' + val,
+                    {},
+                    function(data){
+                        if (data.err_msg.length > 0){
+                            $('#text-error').html(data.err_msg);
+                            $('#error_div').show();
+                            return false;
+                        }
+                        else{
+                            $('#text-error').html("We're all good!");
+                            $('#error_div').show();
+                        }
+                    },
+                    'json'
+                );
+                return;
+            });
+
+           $('.gwe').on('click', function(e){
+                var link =$(this).attr('href');
+                var tr = $(this).closest('tr')
+                e.preventDefault();
+                $('#confirm').modal({ backdrop: 'static', keyboard: false })
+                    .one('click', '#delete', function() {
+                        // $form.trigger('submit');
+                        // tr.remove();
+                        $(location).attr('href', link);
+                    });
+                    // .one() is NOT a typo of .on()
             });
         });
         </script>

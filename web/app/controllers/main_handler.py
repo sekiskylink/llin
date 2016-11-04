@@ -34,6 +34,8 @@ class Index:
             del l['self']
             if info.role == 'Warehouse Manager':
                 return web.seeother("/warehousedata")
+            elif info.role == 'Micro Planning':
+                return web.seeother("/reporters")
             else:
                 return web.seeother("/dashboard")
         else:

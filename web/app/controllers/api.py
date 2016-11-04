@@ -80,3 +80,12 @@ class SubcountyLocations:
             for i in x:
                 ret[parish_name].append({'id': i['id'], 'name': i['name']})
         return json.dumps(ret)
+
+
+class Waybill:
+    def GET(self, id=0):
+        web.header("Content-Type", "application/json; charset=utf-8")
+        r = db.query("SELECT id, waybill FROM national_deliery_log WHERE waybill = $id", {'id': id})
+        if r:
+            return json.dumps({'err_msg': 'Records with Waybill %s already captured' % r[0]['waybill']})
+        return json.dumps({'err_msg': ''})

@@ -14,6 +14,7 @@ from app.controllers.dispatch_handler import Dispatch
 from app.controllers.dashboard_handler import Dashboard
 from app.controllers.settings_handler import Settings
 from app.controllers.distributionpoints_handler import DistPoints
+from app.controllers.api import Waybill
 
 URLS = (
     r'^/', Index,
@@ -25,6 +26,7 @@ URLS = (
     r'/api/v1/location/(\d+)/?', Location,
     r'/api/v1/distribution_points/(\d+)/?', DistributionPoints,
     r'/api/v1/subcountylocations/(\d+)/?', SubcountyLocations,
+    r'/api/v1/waybill/(\d+)/?', Waybill,
     r'/reporters', Reporters,
     # "/search", "Search",
     r'/settings', Settings,
